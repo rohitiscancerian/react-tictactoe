@@ -15,18 +15,51 @@ import './index.css';
     renderSquare(i) {
       return <Square value={this.props.squares[i]}  onClick={() => this.props.onClick(i) }/>;
     }
-  
     
+   rows() {
+       return [0,1,2];
+   }
+   columns() {
+    return [0,1,2];
+    }
+
+    tableGenerator = () => {
+        <table>
+            {
+                for(rows=1;rows<3;rows++)
+                {
+                    return 
+                    (
+                    
+                            <tr>
+                            {columns.map(column => <th>{this.renderSquare(column)}</th>)}
+                            </tr>
+
+                    
+                    )
+                }
+            }
+        </table>
+
+        return (
+          <table>
+                           
+         
+          </table>
+        );
+      }
 
     render() {
 
       return (
         <div>
+         { for(row=0;row<3;row++) { }  
           <div className="board-row">
             {this.renderSquare(0)}
             {this.renderSquare(1)}
             {this.renderSquare(2)}
           </div>
+          { }}
           <div className="board-row">
             {this.renderSquare(3)}
             {this.renderSquare(4)}
@@ -54,14 +87,33 @@ import './index.css';
             };
         }
 
-        jumpTo(step)
+        updateHistoryItem(history,step)
         {
+
+
+            for (var i = 0; i < history.length; ++i) {
+                if (i === step) {
+                    history[i]['moveButtonClassName'] = 'boldButton';
+                }
+                else
+                {
+                    history[i]['moveButtonClassName'] = '';
+                }
+            }
+            return history;
+        }
+
+        jumpTo(event,step)
+        {
+            
             this.setState({
+                history : this.updateHistoryItem(this.state.history,step),
                 stepNumber : step,
-                xIsNext : (step % 2) === 0,
-                className : "boldButton"
+                xIsNext : (step % 2) === 0                             
             });
-            console.log(this);
+            
+            //console.log(event);
+            //event.currentTarget.className = "boldButton";
         }
 
         getLocationOfCurrentMove(i)
@@ -95,7 +147,8 @@ import './index.css';
             this.setState({
                             history : history.concat([{
                                 squares : squares,
-                                lastMoveLocation : currentMove
+                                lastMoveLocation : currentMove,
+                                moveButtonClassName : ''
                             }]),
                             xIsNext: !this.state.xIsNext,
                             stepNumber:  history.length
@@ -117,7 +170,7 @@ import './index.css';
             
             return (
                 <li key={move}>
-                    <button className={move.className}  onClick={() => this.jumpTo(move)}>{desc}</button>
+                    <button name={"move"+move}  className={step.moveButtonClassName}  onClick={(e) => this.jumpTo(e,move)}>{desc}</button>
                     <span>Last Position</span> : {step.lastMoveLocation}
                 </li>
             );
